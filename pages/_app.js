@@ -8,6 +8,7 @@ import theme from "../src/theme";
 import createEmotionCache from "../src/createEmotionCache";
 import Amplify from "aws-amplify";
 import config from "../src/aws-exports";
+import "../src/Loading/Loading.css";
 // Enable Amplify SSR
 Amplify.configure({
   ...config,

@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
 import { red, green, blue } from "@mui/material/colors";
 import { useAuthenticator } from "@aws-amplify/ui-react";
+import API from "../src/API";
 import Image from "next/image";
 import L3LOGO from "../src/Icons/L3_LOGO.svg";
 const ColorButton = styled(Button)(({ theme }) => ({
@@ -70,11 +71,39 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function TransitionsModal(props) {
+  function SubmitForm() {
+    API("post", "/student/create", props.token, values).then((res) => {
+      // console.log(values);
+      if (res.status === 200 && res.message === "CREATE SUCCESS") {
+        console.log("New User Created");
+        props.newUserState(false);
+      }
+    });
+  }
   const { signOut, user } = useAuthenticator((context) => [context.user]);
   const [open, setOpen] = React.useState(true);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [values, setValues] = React.useState({
+    active: "Y",
+    classInSchool: "",
+    cognitoId: props.user.attributes.sub,
+    dob: "",
+    email: props.user.attributes.email,
+    hpNo: props.user.attributes.phone_number.slice(-10),
+    id: "string",
+    name:
+      props.user.attributes.family_name +
+      " " +
+      props.user.attributes.given_name,
+    parentHpNo: "",
+    parentName: "",
+    school: "",
+  });
 
+  const handleChangeForm = (name) => (event) => {
+    setValues({ ...values, [name]: event.target.value });
+  };
   return (
     <div>
       <Modal
@@ -136,6 +165,7 @@ export default function TransitionsModal(props) {
                       " " +
                       props.user.attributes.given_name
                     }
+                    onChange={handleChangeForm("name")}
                     variant="filled"
                   />
                 </Item>
@@ -150,6 +180,7 @@ export default function TransitionsModal(props) {
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    onChange={handleChangeForm("dob")}
                     variant="filled"
                   />
                 </Item>
@@ -177,6 +208,7 @@ export default function TransitionsModal(props) {
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    onChange={handleChangeForm("hpNo")}
                     variant="filled"
                   />
                 </Item>
@@ -192,6 +224,7 @@ export default function TransitionsModal(props) {
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    onChange={handleChangeForm("school")}
                     variant="filled"
                   />
                 </Item>
@@ -206,6 +239,7 @@ export default function TransitionsModal(props) {
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    onChange={handleChangeForm("classInSchool")}
                     variant="filled"
                   />
                 </Item>
@@ -221,6 +255,7 @@ export default function TransitionsModal(props) {
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    onChange={handleChangeForm("parentName")}
                     variant="filled"
                   />
                 </Item>
@@ -236,6 +271,7 @@ export default function TransitionsModal(props) {
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    onChange={handleChangeForm("parentHpNo")}
                     variant="filled"
                   />
                 </Item>
@@ -248,7 +284,7 @@ export default function TransitionsModal(props) {
                     marginLeft: "auto",
                     marginRight: "auto",
                   }}
-                  onClick={() => console.log("submit")}
+                  onClick={SubmitForm}
                   variant="contained"
                 >
                   Submit

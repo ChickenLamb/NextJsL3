@@ -24,6 +24,8 @@ import Profile from "./Profile";
 import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
+import Settings from "./Settings";
+import DashboardHome from "./DashboardHome";
 import Logo from "../Icons/LOGO.svg";
 import L3EDUCATION from "../Icons/L3_EDUCATION.svg";
 import ONLINETUITION from "../Icons/ONLINE_TUITION.svg";
@@ -94,11 +96,16 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
+function DashboardContent(props) {
   const [open, setOpen] = React.useState(true);
+  const [AppBarStatus, setAppBarStatus] = React.useState("Settings");
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  function setAppState(state) {
+    setAppBarStatus(state);
+  }
 
   return (
     <>
@@ -177,7 +184,7 @@ function DashboardContent() {
               </IconButton> */}
             </Toolbar>
             <Divider />
-            <List component="nav">
+            <List component="nav" setAppState={setAppState}>
               {mainListItems}
 
               {secondaryListItems}
@@ -233,13 +240,32 @@ function DashboardContent() {
                     <Orders />
                   </Paper>
                 </Grid> */}
-                <Grid item xs={12}>
+                {AppBarStatus === "Dashboard" && (
+                  <Grid item xs={12}>
+                    <Paper
+                      sx={{ p: 2, display: "flex", flexDirection: "column" }}
+                    >
+                      <DashboardHome />
+                    </Paper>
+                  </Grid>
+                )}
+                {AppBarStatus === "Settings" && (
+                  <Grid item xs={12}>
+                    <Paper
+                      sx={{ p: 2, display: "flex", flexDirection: "column" }}
+                    >
+                      <Settings userData={props.userData} token={props.token} />
+                    </Paper>
+                  </Grid>
+                )}
+
+                {/* <Grid item xs={12}>
                   <Paper
                     sx={{ p: 2, display: "flex", flexDirection: "column" }}
                   >
                     <Orders />
                   </Paper>
-                </Grid>
+                </Grid> */}
               </Grid>
 
               <Copyright sx={{ pt: 4 }} />
@@ -282,6 +308,6 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
-  return <DashboardContent />;
+export default function Dashboard(props) {
+  return <DashboardContent userData={props.userData} token={props.token} />;
 }

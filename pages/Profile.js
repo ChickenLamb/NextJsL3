@@ -6,30 +6,16 @@ import Button from "@mui/material/Button";
 import Link from "../src/Link";
 import Dashboard from "../src/Dashboard/Dashboard.js";
 import RegisterForm from "../src/RegisterForm.js";
-var axios = require("axios");
+import API from "../src/API.js";
 
 function Profile() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [NewUser, setNewUser] = useState(false);
-  async function API(method, path, token) {
-    try {
-      let res = await axios({
-        method: method,
-        url: "https://api.l3education.com.my" + path,
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-      if (res.status == 200) {
-        // test for status you want, etc
-        console.log(res.status);
-      }
-      // Don't forget to return something
-      return res.data;
-    } catch (err) {
-      console.error(err);
-    }
+  const [userData, setUserData] = useState(null);
+
+  function newUserState(state) {
+    setNewUser(state);
   }
   useEffect(() => {
     // Accessing the user session on the client
@@ -50,31 +36,28 @@ function Profile() {
         if (res.status === 200 && res.message === "NOT FOUND") {
           console.log("New User Detected");
           setNewUser(true);
+        } else if (res.status == 200 && res.message === "FOUND") {
+          setUserData(res.data);
         }
       });
     }
   }, [token]);
   return (
     <div>
-      {/* <Button variant="contained" component={Link} noLinkStyle href="/">
-          Go to the main page
-        </Button>
-        <button onClick={signOut}>Sign Out</button>
+      {/*when click Dashboard's sideBar Link then do refresh state and call api after refresh complete */}
+      {/* if role is teacher change RegisterForm api post */}
 
-      {user && (
-        <h1>
-          Welcome, {user.attributes.email}
-          <br />
-          group:{user.signInUserSession.accessToken.payload["cognito:groups"]}
-          <br />
-          token:
-          <br />
-          {user.signInUserSession.accessToken.jwtToken}
-        </h1>
-      )} */}
-
-      {!NewUser && <Dashboard />}
-      {NewUser && <RegisterForm status={NewUser} user={user} />}
+      {token && !NewUser && userData && (
+        <Dashboard userData={userData} token={token} />
+      )}
+      {token && user && NewUser && (
+        <RegisterForm
+          status={NewUser}
+          user={user}
+          token={token}
+          newUserState={newUserState}
+        />
+      )}
     </div>
   );
 }

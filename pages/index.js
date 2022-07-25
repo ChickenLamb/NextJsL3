@@ -6,6 +6,9 @@ import ProTip from "../src/ProTip";
 import Link from "../src/Link";
 import Copyright from "../src/Copyright";
 import Head from "next/head";
+function preventDefault(event) {
+  event.preventDefault();
+}
 export default function Index() {
   return (
     <>
@@ -27,6 +30,7 @@ export default function Index() {
             color="secondary"
             target="_blank"
             rel="noopener"
+            onClick={preventDefault}
           >
             Go to Profile
           </Link>
