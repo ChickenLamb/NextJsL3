@@ -24,11 +24,27 @@ import Profile from "./Profile";
 import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
-import Settings from "./Settings";
+import MyInfo from "./MyInfo";
+import MyCourse from "./MyCourse";
+import MyActivity from "./MyActivity";
+import AddCourse from "./AddCourse";
 import DashboardHome from "./DashboardHome";
 import Logo from "../Icons/LOGO.svg";
 import L3EDUCATION from "../Icons/L3_EDUCATION.svg";
 import ONLINETUITION from "../Icons/ONLINE_TUITION.svg";
+import Dashboardsvg from "../Icons/Home.svg";
+import COURSES from "../Icons/Calendar.svg";
+import EXCERCISE from "../Icons/Tick_Square.svg";
+import Bookmarks from "../Icons/Bookmark.svg";
+import AddCoursesvg from "../Icons/Add_Course.svg";
+import InviteFriends from "../Icons/+.svg";
+import down from "../Icons/down.svg";
+import right from "../Icons/right.svg";
+import Settingssvg from "../Icons/Setting.svg";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ListSubheader from "@mui/material/ListSubheader";
 import Head from "next/head";
 function Copyright(props) {
   return (
@@ -98,14 +114,10 @@ const mdTheme = createTheme();
 
 function DashboardContent(props) {
   const [open, setOpen] = React.useState(true);
-  const [AppBarStatus, setAppBarStatus] = React.useState("Settings");
+  const [AppBarStatus, setAppBarStatus] = React.useState("Dashboard");
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  function setAppState(state) {
-    setAppBarStatus(state);
-  }
 
   return (
     <>
@@ -184,10 +196,146 @@ function DashboardContent(props) {
               </IconButton> */}
             </Toolbar>
             <Divider />
-            <List component="nav" setAppState={setAppState}>
-              {mainListItems}
-
-              {secondaryListItems}
+            <List component="nav">
+              <ListItemButton
+                sx={{ marginTop: 8, marginBottom: 2 }}
+                onClick={() => setAppBarStatus("Dashboard")}
+              >
+                <ListItemIcon>
+                  <Image src={Dashboardsvg} height={30} width={30} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <span style={{ fontFamily: "'Advent Pro', sans-serif" }}>
+                      Dashboard
+                    </span>
+                  }
+                />
+              </ListItemButton>
+              <ListItemButton
+                sx={{ my: 1 }}
+                onClick={() => setAppBarStatus("MyCourse")}
+              >
+                <ListItemIcon>
+                  <Image src={COURSES} height={30} width={30} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <span style={{ fontFamily: "'Advent Pro', sans-serif" }}>
+                      My Course
+                    </span>
+                  }
+                />
+              </ListItemButton>
+              <ListItemButton
+                sx={{ my: 1 }}
+                onClick={() => setAppBarStatus("MyActivity")}
+              >
+                <ListItemIcon>
+                  <Image src={EXCERCISE} height={30} width={30} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <span style={{ fontFamily: "'Advent Pro', sans-serif" }}>
+                      My Activity
+                    </span>
+                  }
+                />
+              </ListItemButton>
+              <ListSubheader
+                component="div"
+                sx={{
+                  marginTop: 6,
+                  fontFamily: "'Advent Pro', sans-serif",
+                  backgroundColor: "#FBE081",
+                  fontSize: "1.1em",
+                  px: 3,
+                }}
+              >
+                <Stack
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  spacing={1}
+                >
+                  MORE&nbsp;&nbsp;
+                  <Image src={down} height={12} width={9.6} />
+                </Stack>
+              </ListSubheader>
+              <ListItemButton
+                sx={{ my: 1 }}
+                onClick={() => setAppBarStatus("AddCourse")}
+              >
+                <ListItemIcon>
+                  <Image src={AddCoursesvg} height={30} width={30} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <span style={{ fontFamily: "'Advent Pro', sans-serif" }}>
+                      Add Course
+                    </span>
+                  }
+                />
+              </ListItemButton>
+              <ListItemButton
+                sx={{ my: 1 }}
+                onClick={() => setAppBarStatus("MyInfo")}
+              >
+                <ListItemIcon>
+                  <Image src={Bookmarks} height={30} width={30} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <span style={{ fontFamily: "'Advent Pro', sans-serif" }}>
+                      My Info
+                    </span>
+                  }
+                />
+              </ListItemButton>
+              <ListItemButton sx={{ my: 1 }}>
+                <ListItemIcon>
+                  <Image src={Settingssvg} height={30} width={30} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <span style={{ fontFamily: "'Advent Pro', sans-serif" }}>
+                      Setting
+                    </span>
+                  }
+                />
+              </ListItemButton>
+              <ListSubheader
+                component="div"
+                sx={{
+                  marginTop: 6,
+                  fontFamily: "'Advent Pro', sans-serif",
+                  backgroundColor: "#FBE081",
+                  fontSize: "1.1em",
+                  px: 3,
+                }}
+              >
+                <Stack
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  spacing={1}
+                >
+                  Payment&nbsp;&nbsp;
+                  <Image src={right} height={12} width={9.6} />
+                </Stack>
+              </ListSubheader>
+              <ListItemButton sx={{ my: 1 }}>
+                <ListItemIcon>
+                  <Image src={InviteFriends} height={30} width={30} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <span style={{ fontFamily: "'Advent Pro', sans-serif" }}>
+                      Invite Friends
+                    </span>
+                  }
+                />
+              </ListItemButton>
             </List>
           </Drawer>
 
@@ -249,12 +397,39 @@ function DashboardContent(props) {
                     </Paper>
                   </Grid>
                 )}
-                {AppBarStatus === "Settings" && (
+                {AppBarStatus === "MyCourse" && (
                   <Grid item xs={12}>
                     <Paper
                       sx={{ p: 2, display: "flex", flexDirection: "column" }}
                     >
-                      <Settings userData={props.userData} token={props.token} />
+                      <MyCourse />
+                    </Paper>
+                  </Grid>
+                )}
+                {AppBarStatus === "MyActivity" && (
+                  <Grid item xs={12}>
+                    <Paper
+                      sx={{ p: 2, display: "flex", flexDirection: "column" }}
+                    >
+                      <MyActivity />
+                    </Paper>
+                  </Grid>
+                )}
+                {AppBarStatus === "AddCourse" && (
+                  <Grid item xs={12}>
+                    <Paper
+                      sx={{ p: 2, display: "flex", flexDirection: "column" }}
+                    >
+                      <AddCourse />
+                    </Paper>
+                  </Grid>
+                )}
+                {AppBarStatus === "MyInfo" && (
+                  <Grid item xs={12}>
+                    <Paper
+                      sx={{ p: 2, display: "flex", flexDirection: "column" }}
+                    >
+                      <MyInfo userData={props.userData} token={props.token} />
                     </Paper>
                   </Grid>
                 )}
@@ -287,7 +462,7 @@ function DashboardContent(props) {
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
               <Grid container spacing={3}>
                 {/* Profile */}
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ height: "95vh", overflowY: "scroll" }}>
                   <Paper
                     sx={{
                       p: 2,

@@ -30,7 +30,6 @@ export default function Index() {
             color="secondary"
             target="_blank"
             rel="noopener"
-            onClick={preventDefault}
           >
             Go to Profile
           </Link>

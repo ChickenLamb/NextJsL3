@@ -34,7 +34,7 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
-export default function Settings(props) {
+export default function MyInfo(props) {
   function SubmitForm() {
     API("post", "/student/create", props.token, values).then((res) => {
       //   console.log(values);
@@ -71,7 +71,7 @@ export default function Settings(props) {
         color="black"
         gutterBottom
       >
-        Settings
+        My Info
       </Typography>
       <Box
         component="div"
