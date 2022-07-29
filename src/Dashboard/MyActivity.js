@@ -107,7 +107,7 @@ const MyActivity = (props) => {
                 >
                   <Grid item xs={1}></Grid>
                   <Grid item xs={10}>
-                    <Item>
+                    <Item sx={{ borderRadius: 3 }}>
                       <Grid
                         container
                         rowSpacing={1}
