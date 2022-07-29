@@ -40,12 +40,14 @@ import AddCoursesvg from "../Icons/Add_Course.svg";
 import InviteFriends from "../Icons/+.svg";
 import down from "../Icons/down.svg";
 import right from "../Icons/right.svg";
+import left from "../Icons/left.svg";
 import Settingssvg from "../Icons/Setting.svg";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import Head from "next/head";
+import { Button } from "@mui/material";
 function Copyright(props) {
   return (
     <Typography
@@ -91,10 +93,10 @@ const Drawer = styled(MuiDrawer, {
     position: "relative",
     width: drawerWidth,
     backgroundColor: "#FBE081",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    // transition: theme.transitions.create("width", {
+    //   easing: theme.transitions.easing.sharp,
+    //   duration: theme.transitions.duration.enteringScreen,
+    // }),
     boxSizing: "border-box",
     ...(!open && {
       overflowX: "hidden",
@@ -115,6 +117,7 @@ const mdTheme = createTheme();
 function DashboardContent(props) {
   const [open, setOpen] = React.useState(true);
   const [AppBarStatus, setAppBarStatus] = React.useState("Dashboard");
+  const [RightSideBarOpen, setRightSideBarOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -352,7 +355,7 @@ function DashboardContent(props) {
             }}
           >
             <Toolbar />
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Container maxWidth="lg" sx={{ mt: 0, mb: 4 }}>
               <Grid container spacing={3}>
                 {/* Chart */}
                 {/* <Grid item xs={12} md={8} lg={9}>
@@ -420,7 +423,7 @@ function DashboardContent(props) {
                     <Paper
                       sx={{ p: 2, display: "flex", flexDirection: "column" }}
                     >
-                      <AddCourse />
+                      <AddCourse token={props.token} />
                     </Paper>
                   </Grid>
                 )}
@@ -448,10 +451,10 @@ function DashboardContent(props) {
           </Box>
           <Drawer
             sx={{
-              width: drawerWidth + 130,
+              width: RightSideBarOpen ? drawerWidth + 130 : 60,
               flexShrink: 0,
               "& .MuiDrawer-paper": {
-                width: drawerWidth + 130,
+                width: RightSideBarOpen ? drawerWidth + 130 : 60,
                 backgroundColor: "#FFFFFF",
               },
             }}
@@ -462,18 +465,44 @@ function DashboardContent(props) {
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
               <Grid container spacing={3}>
                 {/* Profile */}
-                <Grid item xs={12} sx={{ height: "95vh", overflowY: "scroll" }}>
+                <Grid item xs={1} my={"auto"}>
                   <Paper
+                    elevation={0}
                     sx={{
-                      p: 2,
                       display: "flex",
-                      flexDirection: "column",
-                      wordBreak: "break-all",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
-                    <Profile />
+                    <Button
+                      onClick={() => {
+                        RightSideBarOpen
+                          ? setRightSideBarOpen(false)
+                          : setRightSideBarOpen(true);
+                      }}
+                    >
+                      <Image src={left} height={25} width={25} />
+                    </Button>
                   </Paper>
                 </Grid>
+                {RightSideBarOpen && (
+                  <Grid
+                    item
+                    xs={11}
+                    sx={{ height: "90vh", overflowY: "scroll" }}
+                  >
+                    <Paper
+                      sx={{
+                        p: 2,
+                        display: "flex",
+                        flexDirection: "column",
+                        wordBreak: "break-all",
+                      }}
+                    >
+                      <Profile />
+                    </Paper>
+                  </Grid>
+                )}
               </Grid>
             </Container>
           </Drawer>

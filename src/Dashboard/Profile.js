@@ -227,18 +227,18 @@ export default function Profile() {
           sx={{
             width: 152,
             height: 187,
-            backgroundColor: "#E8DDE5",
+            backgroundColor: "#FEF3F0",
             boxShadow: "2px 4px #888888",
             borderRadius: 3,
             "&:hover": {
-              backgroundColor: "#E8DDE5",
+              backgroundColor: "#FEF3F0",
               transform: "scale(0.99)",
 
               borderRadius: 3,
             },
           }}
         >
-          <Image src={Activity} layout={"fill"} />
+          <Image src={Activity} layout={"fill"} priority />
         </ColorButton>
       </Stack>
       <ColorButton
