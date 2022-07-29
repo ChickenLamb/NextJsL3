@@ -397,7 +397,7 @@ function DashboardContent(props) {
                       sx={{ p: 2, display: "flex", flexDirection: "column" }}
                     >
                       {/* GET */}
-                      <DashboardHome />
+                      <DashboardHome token={props.token} />
                     </Paper>
                   </Grid>
                 )}
@@ -407,7 +407,7 @@ function DashboardContent(props) {
                       sx={{ p: 2, display: "flex", flexDirection: "column" }}
                     >
                       {/* GET */}
-                      <MyCourse />
+                      <MyCourse token={props.token} />
                     </Paper>
                   </Grid>
                 )}
