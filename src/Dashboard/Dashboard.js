@@ -396,6 +396,7 @@ function DashboardContent(props) {
                     <Paper
                       sx={{ p: 2, display: "flex", flexDirection: "column" }}
                     >
+                      {/* GET */}
                       <DashboardHome />
                     </Paper>
                   </Grid>
@@ -405,6 +406,7 @@ function DashboardContent(props) {
                     <Paper
                       sx={{ p: 2, display: "flex", flexDirection: "column" }}
                     >
+                      {/* GET */}
                       <MyCourse />
                     </Paper>
                   </Grid>
@@ -414,7 +416,8 @@ function DashboardContent(props) {
                     <Paper
                       sx={{ p: 2, display: "flex", flexDirection: "column" }}
                     >
-                      <MyActivity />
+                      {/* GET */}
+                      <MyActivity token={props.token} />
                     </Paper>
                   </Grid>
                 )}
@@ -423,7 +426,8 @@ function DashboardContent(props) {
                     <Paper
                       sx={{ p: 2, display: "flex", flexDirection: "column" }}
                     >
-                      <AddCourse token={props.token} />
+                      {/* GET && POST */}
+                      {<AddCourse token={props.token} />}
                     </Paper>
                   </Grid>
                 )}
@@ -432,6 +436,7 @@ function DashboardContent(props) {
                     <Paper
                       sx={{ p: 2, display: "flex", flexDirection: "column" }}
                     >
+                      {/* POST */}
                       <MyInfo userData={props.userData} token={props.token} />
                     </Paper>
                   </Grid>

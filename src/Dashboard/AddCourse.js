@@ -48,15 +48,17 @@ const AddCourse = (props) => {
   const [Course, setCourse] = React.useState([]);
   const PicHeight = 253;
   const PicWidth = 436;
+  let total = 0;
   React.useEffect(() => {
-    if (props.token !== null) {
+    if (props.token !== null && total === 0) {
+      total += 1;
       // use API as a function to call API anywhere
       API("get", "/course/list/", props.token).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status === 200 && res.message === "NOT FOUND") {
-          console.log("not found");
+          // console.log("not found");
         } else if (res.status == 200 && res.message === "FOUND") {
-          console.log("found");
+          // console.log("found");
           setCourse(res.data);
         }
       });

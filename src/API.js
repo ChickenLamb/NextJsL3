@@ -2,6 +2,7 @@ import React from "react";
 var axios = require("axios");
 
 export default async function API(method, path, token, data) {
+  console.log(path);
   try {
     let res = await axios({
       method: method,
