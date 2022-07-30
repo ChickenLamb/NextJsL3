@@ -24,9 +24,8 @@ const DashboardHome = (props) => {
   React.useEffect(() => {
     if (props.token !== null && total === 0) {
       total += 1;
-      console.log("here");
       // use API as a function to call API anywhere
-      setInterval(() => setPage(++page % pageLimit), 15000);
+      setInterval(() => setPage((prev) => (prev + 1) % pageLimit), 5000);
       API("get", "/announcement/getAll/", props.token).then((res) => {
         console.log(res);
         if (res.status === 200 && res.message === "NOT FOUND") {
@@ -38,6 +37,7 @@ const DashboardHome = (props) => {
       });
     }
   }, []);
+  // React.useEffect(() => console.log(page), [page]);
   return (
     <>
       <Typography
