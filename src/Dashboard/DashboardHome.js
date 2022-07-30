@@ -4,35 +4,128 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import NoImg from "../Icons/NoImg.svg";
+import clock from "../Icons/clock.svg";
+import lesson from "../Icons/lesson.svg";
+import star from "../Icons/star.svg";
+import Math from "../Icons/Math.svg";
+import English from "../Icons/English.svg";
+import Physics from "../Icons/Physics.svg";
+import BahasaMelayu from "../Icons/BahasaMelayu.svg";
 import API from "../API";
 import Image from "next/image";
 import { Button } from "@mui/material";
+import Box from "@mui/material/Box";
+
+function convertHHMM(timeData) {
+  return (
+    timeData.toFixed(0) +
+    "h" +
+    (timeData.toString().slice(-3, -2) === "."
+      ? (parseInt(timeData.toString().slice(-2)) / 100) * 60 + "m"
+      : "")
+  );
+}
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "center",
   color: theme.palette.text.secondary,
-  backgroundColor: "#FEF3F0",
+  backgroundColor: "#fff",
+}));
+const Item2 = styled(Paper)(({ theme }) => ({
+  background: "none",
+  ...theme.typography.body2,
+  padding: theme.spacing(0),
+  textAlign: "center",
+  color: "#434343",
+  fontSize: "1em",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+}));
+const ColorButton = styled(Button)(({ theme }) => ({
+  textTransform: "capitalize",
+  width: "fit-content",
+  height: "fit-content",
+  color: "#000000DE",
+  backgroundColor: "#4F46BA",
+  fontFamily: "'Advent Pro', sans-serif",
+  fontSize: "1em",
+  paddingLeft: 18,
+  paddingRight: 18,
+  marginTop: 5,
+  marginBottom: 5,
+  borderRight: "15px solid rgb(249 137 107)",
+  "&:hover": {
+    backgroundColor: "#f52cae",
+    boxShadow:
+      "0 10px 16px 0 rgb(249 137 107 / 20%), 0 6px 20px 0 rgb(249 137 107 / 19%) !important",
+  },
 }));
 const pageLimit = 3;
 const DashboardHome = (props) => {
   const [Announcement, setAnnouncement] = React.useState([]);
+
   const [page, setPage] = React.useState(0);
-  // const intervalId = setInterval(() => setPage(++page % pageLimit), 10000);
+  const [Activity, setActivity] = React.useState([]);
+  const [Course, setCourse] = React.useState([]);
   let total = 0;
+  function convertMonth(number) {
+    if (number === 1) return "MON";
+    else if (number === 2) return "TUE";
+    else if (number === 3) return "WED";
+    else if (number === 4) return "THUR";
+    else if (number === 5) return "FRI";
+    else if (number === 6) return "SAT";
+    else if (number === 7) return "SUN";
+  }
+  function ClassroomLinkFetch(Id) {
+    API("get", "/onlineClassroom/get/" + Id, props.token).then((res) => {
+      // console.log(res);
+      if (res.status === 200 && res.message === "NOT FOUND") {
+        // console.log("not found");
+      } else if (res.status == 200 && res.message === "FOUND") {
+        // console.log("found");
+        // console.log(res.data.googleClassroom);
+        window.open(res.data.zoomUrl, "_blank");
+      }
+    });
+  }
+  function ShowCourseLayout(data) {
+    console.log(data);
+  }
   React.useEffect(() => {
     if (props.token !== null && total === 0) {
       total += 1;
+
       // use API as a function to call API anywhere
       setInterval(() => setPage((prev) => (prev + 1) % pageLimit), 5000);
       API("get", "/announcement/getAll/", props.token).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status === 200 && res.message === "NOT FOUND") {
           // console.log("not found");
         } else if (res.status == 200 && res.message === "FOUND") {
           // console.log("found");
           setAnnouncement(res.data);
+        }
+      });
+      API("get", "/courseSubscription/list/", props.token).then((res) => {
+        // console.log(res);
+        if (res.status === 200 && res.message === "NOT FOUND") {
+          // console.log("not found");
+        } else if (res.status == 200 && res.message === "FOUND") {
+          // console.log("found");
+          setActivity(res.data);
+        }
+      });
+      API("get", "/course/list/", props.token).then((res) => {
+        console.log(res);
+        if (res.status === 200 && res.message === "NOT FOUND") {
+          // console.log("not found");
+        } else if (res.status == 200 && res.message === "FOUND") {
+          // console.log("found");
+          setCourse(res.data);
         }
       });
     }
@@ -58,7 +151,7 @@ const DashboardHome = (props) => {
       >
         Announcement
       </Typography>
-      {/* {Announcement.map(
+      {Announcement.map(
         (data, index) =>
           index === page && (
             <Stack
@@ -124,7 +217,7 @@ const DashboardHome = (props) => {
               </Item>
             </Stack>
           )
-      )} */}
+      )}
       <Stack
         my={1}
         direction="row"
@@ -164,6 +257,71 @@ const DashboardHome = (props) => {
       >
         Upcoming Courses
       </Typography>
+      <Box sx={{ width: "100%" }}>
+        <Stack
+          direction="row"
+          justifyContent="space-evenly"
+          alignItems="center"
+          spacing={2}
+        >
+          {Course.filter((Course) =>
+            Activity.some((Activity) => Activity.courseId === Course.id)
+          ).map(
+            (data, index) =>
+              index < 3 && (
+                <Item key={index} elevation={0}>
+                  <ColorButton
+                    onClick={() => ShowCourseLayout(data.id)}
+                    sx={{ wordBreak: "keep-all", px: 5, borderRadius: 5 }}
+                  >
+                    <Stack
+                      direction="column"
+                      justifyContent="space-evenly"
+                      alignItems="flex-start"
+                      spacing={2}
+                    >
+                      <Item2 elevation={0}>
+                        <Typography
+                          sx={{
+                            fontFamily: "'Andada Pro', serif",
+                            fontWeight: "bold",
+                            color: "#FFFFFF",
+                          }}
+                          component="h6"
+                          variant="h6"
+                          color="black"
+                          gutterBottom
+                        >
+                          {index}
+                          &nbsp;
+                          {data.courseName}
+                        </Typography>
+                      </Item2>
+                      <Item2 elevation={0}>
+                        <Typography
+                          sx={{
+                            fontFamily: "'Advent Pro', sans-serif",
+                            fontWeight: "bold",
+                            color: "#FFFFFF",
+                          }}
+                          component="p"
+                          variant="body1"
+                          color="black"
+                          gutterBottom
+                        >
+                          {convertMonth(data.dayOfWeek)}
+                          &nbsp;
+                          {data.startTime.slice(0, 5)}-
+                          {data.endTime.slice(0, 5)}
+                        </Typography>
+                      </Item2>
+                    </Stack>
+                  </ColorButton>
+                </Item>
+              )
+          )}
+        </Stack>
+      </Box>
       <Typography
         sx={{ fontFamily: "'Andada Pro', serif", fontWeight: "bold" }}
         component="h6"
