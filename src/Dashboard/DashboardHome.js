@@ -43,6 +43,7 @@ function convertHHMM(timeData) {
       : "")
   );
 }
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -85,6 +86,7 @@ const pageLimit = 3;
 let AnnouncementPages = 4;
 const DashboardHome = (props) => {
   const [SelectCourseId, setSelectCourseId] = React.useState(null);
+  const [Timetable, setTimetable] = React.useState([]);
   const [Announcement, setAnnouncement] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [Activity, setActivity] = React.useState([]);
@@ -103,7 +105,7 @@ const DashboardHome = (props) => {
     else if (number === 6) return "SAT";
     else if (number === 7) return "SUN";
   }
-  function ClassroomLinkFetch(SelectCourseId) {
+  function ClassroomLinkFetch(SelectCourseId, variant) {
     console.log(SelectCourseId);
     API("get", "/onlineClassroom/get/" + SelectCourseId, props.token).then(
       (res) => {
@@ -113,7 +115,11 @@ const DashboardHome = (props) => {
         } else if (res.status == 200 && res.message === "FOUND") {
           // console.log("found");
           // console.log(res.data.googleClassroom);
-          window.open(res.data.zoomUrl, "_blank");
+          if (variant === "google") {
+            window.open(res.data.googleClassroom, "_blank");
+          } else if (variant === "zoom") {
+            window.open(res.data.zoomUrl, "_blank");
+          }
         }
       }
     );
@@ -121,9 +127,9 @@ const DashboardHome = (props) => {
   React.useEffect(() => {
     if (props.token !== null && total === 0) {
       total += 1;
-
       // use API as a function to call API anywhere
       setInterval(() => setPage((prev) => (prev + 1) % pageLimit), 10000);
+
       API("get", "/announcement/getAll/", props.token).then((res) => {
         // console.log(res);
         if (res.status === 200 && res.message === "NOT FOUND") {
@@ -142,8 +148,9 @@ const DashboardHome = (props) => {
           setActivity(res.data);
         }
       });
+
       API("get", "/course/list/", props.token).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status === 200 && res.message === "NOT FOUND") {
           // console.log("not found");
         } else if (res.status == 200 && res.message === "FOUND") {
@@ -153,6 +160,28 @@ const DashboardHome = (props) => {
       });
     }
   }, []);
+  React.useEffect(() => {
+    if (Activity.length > 0) {
+      // console.log(Activity);
+      setTimetable([]);
+      Activity.forEach((element) => {
+        API("get", "/timetable/list/" + element.courseId, props.token).then(
+          (res) => {
+            // console.log(res);
+            if (res.status === 200 && res.message === "NOT FOUND") {
+              // console.log("not found");
+            } else if (res.status == 200 && res.message === "FOUND") {
+              // console.log("found");
+              setTimetable((prevState) => [...prevState, ...res.data]);
+            }
+          }
+        );
+      });
+    }
+  }, [Activity]);
+  React.useEffect(() => {
+    console.log("timetable", Timetable);
+  }, [Timetable]);
   // React.useEffect(() => console.log(page), [page]);
   return (
     <>
@@ -252,7 +281,7 @@ const DashboardHome = (props) => {
                         },
                       }}
                       variant="contained"
-                      onClick={() => ClassroomLinkFetch(SelectCourseId)}
+                      onClick={() => ClassroomLinkFetch(SelectCourseId, "zoom")}
                     >
                       START COURSE
                     </ColorButton>
@@ -272,6 +301,52 @@ const DashboardHome = (props) => {
       >
         Dashboard
       </Typography>
+      <Typography
+        sx={{ fontFamily: "'Andada Pro', serif", fontWeight: "bold" }}
+        component="h6"
+        variant="h6"
+        color="black"
+        gutterBottom
+      >
+        Timetable
+      </Typography>
+      <Box sx={{ width: "100%" }}>
+        <Stack
+          direction="row"
+          justifyContent="space-evenly"
+          alignItems="center"
+          spacing={2}
+          px={2}
+        >
+          {["FRI", "SAT", "SUN", "MON", "TUE", "WED", "THUR", "FRI"].map(
+            (data, index) => (
+              <Item sx={{ width: "100%" }}>
+                <Typography
+                  sx={{ fontFamily: "'Andada Pro', serif", fontWeight: "bold" }}
+                  component="p"
+                  variant="h7"
+                  color="black"
+                  gutterBottom
+                  textAlign={"left"}
+                >
+                  {index + 1}
+                </Typography>
+                {/* convertMonth(data.dayOfWeek) === data && data.courseDate year === this year && data.courseDate month === this month && data.courseDate day === this day(+-depends on today's date) */}
+
+                <Typography
+                  sx={{ fontFamily: "'Andada Pro', serif", fontWeight: "bold" }}
+                  component="p"
+                  variant="h7"
+                  color="black"
+                  gutterBottom
+                >
+                  {data}
+                </Typography>
+              </Item>
+            )
+          )}
+        </Stack>
+      </Box>
       <Typography
         sx={{ fontFamily: "'Andada Pro', serif", fontWeight: "bold" }}
         component="h6"
@@ -392,13 +467,12 @@ const DashboardHome = (props) => {
       >
         Upcoming Courses
       </Typography>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", overflowX: "auto" }}>
         <Stack
           direction="row"
           justifyContent="space-evenly"
           alignItems="center"
           spacing={2}
-          sx={{ overflowX: "scroll" }}
         >
           {Course.filter((Course) =>
             Activity.some((Activity) => Activity.courseId === Course.id)
@@ -575,7 +649,9 @@ const DashboardHome = (props) => {
                         >
                           <ColorButton
                             variant="contained"
-                            onClick={() => ClassroomLinkFetch(data.id)}
+                            onClick={() =>
+                              ClassroomLinkFetch(data.id, "google")
+                            }
                             sx={{
                               borderRadius: 50,
                               borderRight: 0,

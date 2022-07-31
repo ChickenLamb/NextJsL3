@@ -395,7 +395,11 @@ function DashboardContent(props) {
                 {AppBarStatus === "Dashboard" && (
                   <Grid item xs={12}>
                     <Paper
-                      sx={{ p: 2, display: "flex", flexDirection: "column" }}
+                      sx={{
+                        p: 2,
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
                     >
                       {/* GET */}
                       <DashboardHome token={props.token} />
