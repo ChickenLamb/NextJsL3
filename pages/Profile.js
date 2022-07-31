@@ -7,7 +7,7 @@ import Link from "../src/Link";
 import Dashboard from "../src/Dashboard/Dashboard.js";
 import RegisterForm from "../src/RegisterForm.js";
 import API from "../src/API.js";
-
+import Head from "next/head";
 function Profile() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
@@ -44,6 +44,9 @@ function Profile() {
   }, [token]);
   return (
     <div>
+      <Head>
+        <title>ALL COURSES </title>
+      </Head>
       {/*when click Dashboard's sideBar Link then do refresh state and call api after refresh complete */}
       {/* if role is teacher change RegisterForm api post */}
 

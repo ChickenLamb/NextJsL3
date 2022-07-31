@@ -2,6 +2,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
+import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import NoImg from "../Icons/NoImg.svg";
 import clock from "../Icons/clock.svg";
@@ -15,6 +16,23 @@ import API from "../API";
 import Image from "next/image";
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "fit-content",
+  // bgcolor: "background.paper",
+  // border: "2px solid #000",
+  // borderRadius: 5,
+  // boxShadow: 24,
+  p: 4,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
 
 function convertHHMM(timeData) {
   return (
@@ -31,7 +49,7 @@ const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   textAlign: "center",
   color: theme.palette.text.secondary,
-  backgroundColor: "#fff",
+  backgroundColor: "#FEF3F0",
 }));
 const Item2 = styled(Paper)(({ theme }) => ({
   background: "none",
@@ -64,12 +82,17 @@ const ColorButton = styled(Button)(({ theme }) => ({
   },
 }));
 const pageLimit = 3;
+let AnnouncementPages = 4;
 const DashboardHome = (props) => {
+  const [SelectCourseId, setSelectCourseId] = React.useState(null);
   const [Announcement, setAnnouncement] = React.useState([]);
-
   const [page, setPage] = React.useState(0);
   const [Activity, setActivity] = React.useState([]);
   const [Course, setCourse] = React.useState([]);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   let total = 0;
   function convertMonth(number) {
     if (number === 1) return "MON";
@@ -80,27 +103,27 @@ const DashboardHome = (props) => {
     else if (number === 6) return "SAT";
     else if (number === 7) return "SUN";
   }
-  function ClassroomLinkFetch(Id) {
-    API("get", "/onlineClassroom/get/" + Id, props.token).then((res) => {
-      // console.log(res);
-      if (res.status === 200 && res.message === "NOT FOUND") {
-        // console.log("not found");
-      } else if (res.status == 200 && res.message === "FOUND") {
-        // console.log("found");
-        // console.log(res.data.googleClassroom);
-        window.open(res.data.zoomUrl, "_blank");
+  function ClassroomLinkFetch(SelectCourseId) {
+    console.log(SelectCourseId);
+    API("get", "/onlineClassroom/get/" + SelectCourseId, props.token).then(
+      (res) => {
+        // console.log(res);
+        if (res.status === 200 && res.message === "NOT FOUND") {
+          // console.log("not found");
+        } else if (res.status == 200 && res.message === "FOUND") {
+          // console.log("found");
+          // console.log(res.data.googleClassroom);
+          window.open(res.data.zoomUrl, "_blank");
+        }
       }
-    });
-  }
-  function ShowCourseLayout(data) {
-    console.log(data);
+    );
   }
   React.useEffect(() => {
     if (props.token !== null && total === 0) {
       total += 1;
 
       // use API as a function to call API anywhere
-      setInterval(() => setPage((prev) => (prev + 1) % pageLimit), 5000);
+      setInterval(() => setPage((prev) => (prev + 1) % pageLimit), 10000);
       API("get", "/announcement/getAll/", props.token).then((res) => {
         // console.log(res);
         if (res.status === 200 && res.message === "NOT FOUND") {
@@ -133,6 +156,113 @@ const DashboardHome = (props) => {
   // React.useEffect(() => console.log(page), [page]);
   return (
     <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          {/* <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography> */}
+          <Grid container spacing={2}>
+            {Course.filter((Course) => SelectCourseId === Course.id).map(
+              (data, index) => (
+                <Grid item xs={12} md={12} key={index}>
+                  <Item sx={{ backgroundColor: "#FCC1C1" }}>
+                    <Box
+                      component="div"
+                      p={2}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        backgroundColor: "#FCC1C1",
+                      }}
+                    >
+                      <Image
+                        src={
+                          data.courseName.toLowerCase().includes("bahasa") ||
+                          data.courseName.toLowerCase().includes("马来文")
+                            ? BahasaMelayu
+                            : data.courseName.toLowerCase().includes("math") ||
+                              data.courseName.toLowerCase().includes("数")
+                            ? Math
+                            : data.courseName
+                                .toLowerCase()
+                                .includes("physic") ||
+                              data.courseName.toLowerCase().includes("物")
+                            ? Physics
+                            : data.courseName
+                                .toLowerCase()
+                                .includes("english") ||
+                              data.courseName.toLowerCase().includes("英")
+                            ? English
+                            : NoImg
+                        }
+                        layout={"fixed"}
+                      />
+                    </Box>
+                    <Typography
+                      sx={{
+                        color: "#000000",
+                        fontWeight: "bold",
+                        fontSize: "1.8em",
+                        textAlign: "center",
+                      }}
+                    >
+                      {data.courseName}
+                    </Typography>
+                    <Typography
+                      ml={3}
+                      pt={1}
+                      sx={{
+                        textAlign: "left",
+                        wordBreak: "break-all",
+                        maxWidth: 500,
+                        maxHeight: 200,
+                        color: "#434343",
+                      }}
+                    >
+                      ClassDay:&nbsp;{data.dayOfWeek}
+                      <br />
+                      Class Time:&nbsp;{data.startTime.slice(0, 5)}~
+                      {data.endTime.slice(0, 5)}
+                      <br />
+                      Teacher:&nbsp;{data.teacherName}
+                      <br />
+                      Course content:&nbsp;{data.courseDescription}
+                    </Typography>
+                    <ColorButton
+                      sx={{
+                        px: 5,
+                        py: 3.5,
+                        borderTopLeftRadius: 50,
+                        borderBottomRightRadius: 25,
+                        backgroundColor: "#FFE790",
+                        color: "#000",
+                        borderRight: 0,
+                        "&:hover": {
+                          backgroundColor: "#000",
+                          color: "#fff",
+                        },
+                      }}
+                      variant="contained"
+                      onClick={() => ClassroomLinkFetch(SelectCourseId)}
+                    >
+                      START COURSE
+                    </ColorButton>
+                  </Item>
+                </Grid>
+              )
+            )}
+          </Grid>
+        </Box>
+      </Modal>
       <Typography
         sx={{ fontFamily: "'Andada Pro', serif", fontWeight: "bold" }}
         component="h4"
@@ -153,7 +283,8 @@ const DashboardHome = (props) => {
       </Typography>
       {Announcement.map(
         (data, index) =>
-          index === page && (
+          index === page &&
+          index < AnnouncementPages && (
             <Stack
               direction="row"
               justifyContent="center"
@@ -213,6 +344,7 @@ const DashboardHome = (props) => {
                   width={250}
                   layout={"fixed"}
                   style={{ marginLeft: "auto", marginRight: "auto" }}
+                  priority
                 />
               </Item>
             </Stack>
@@ -225,28 +357,31 @@ const DashboardHome = (props) => {
         alignItems="center"
         spacing={0}
       >
-        {Announcement.map((data, index) => (
-          <Item
-            elevation={0}
-            sx={{ mx: 1, backgroundColor: "#FFFFFF" }}
-            key={index}
-          >
-            <Button
-              variant="contained"
-              sx={{
-                borderRadius: 500,
-                width: 25,
-                height: 10,
-                backgroundColor: page === index ? "#4F46BA" : "#FBE081",
-                "&:hover": {
-                  backgroundColor: "#4F46BA",
-                },
-              }}
-              onClick={() => setPage(index)}
-              onMouseEnter={() => setPage(index)}
-            ></Button>
-          </Item>
-        ))}
+        {Announcement.map(
+          (data, index) =>
+            index < AnnouncementPages && (
+              <Item
+                elevation={0}
+                sx={{ mx: 1, backgroundColor: "#FFFFFF" }}
+                key={index}
+              >
+                <Button
+                  variant="contained"
+                  sx={{
+                    borderRadius: 500,
+                    width: 25,
+                    height: 10,
+                    backgroundColor: page === index ? "#4F46BA" : "#FBE081",
+                    "&:hover": {
+                      backgroundColor: "#4F46BA",
+                    },
+                  }}
+                  onClick={() => setPage(index)}
+                  onMouseEnter={() => setPage(index)}
+                ></Button>
+              </Item>
+            )
+        )}
       </Stack>
       <Typography
         sx={{ fontFamily: "'Andada Pro', serif", fontWeight: "bold" }}
@@ -263,63 +398,67 @@ const DashboardHome = (props) => {
           justifyContent="space-evenly"
           alignItems="center"
           spacing={2}
+          sx={{ overflowX: "scroll" }}
         >
           {Course.filter((Course) =>
             Activity.some((Activity) => Activity.courseId === Course.id)
-          ).map(
-            (data, index) =>
-              index < 3 && (
-                <Item key={index} elevation={0}>
-                  <ColorButton
-                    onClick={() => ShowCourseLayout(data.id)}
-                    sx={{ wordBreak: "keep-all", px: 5, borderRadius: 5 }}
-                  >
-                    <Stack
-                      direction="column"
-                      justifyContent="space-evenly"
-                      alignItems="flex-start"
-                      spacing={2}
+          ).map((data, index) => (
+            <Item key={index} elevation={0} sx={{ backgroundColor: "#fff" }}>
+              <ColorButton
+                onClick={() => {
+                  setOpen(true);
+                  setSelectCourseId(data.id);
+                }}
+                sx={{
+                  wordBreak: "keep-all",
+                  px: 5,
+                  borderRadius: 5,
+                }}
+              >
+                <Stack
+                  direction="column"
+                  justifyContent="space-evenly"
+                  alignItems="flex-start"
+                  spacing={2}
+                >
+                  <Item2 elevation={0}>
+                    <Typography
+                      sx={{
+                        fontFamily: "'Andada Pro', serif",
+                        fontWeight: "bold",
+                        color: "#FFFFFF",
+                      }}
+                      component="h6"
+                      variant="h6"
+                      color="black"
+                      gutterBottom
                     >
-                      <Item2 elevation={0}>
-                        <Typography
-                          sx={{
-                            fontFamily: "'Andada Pro', serif",
-                            fontWeight: "bold",
-                            color: "#FFFFFF",
-                          }}
-                          component="h6"
-                          variant="h6"
-                          color="black"
-                          gutterBottom
-                        >
-                          {index}
-                          &nbsp;
-                          {data.courseName}
-                        </Typography>
-                      </Item2>
-                      <Item2 elevation={0}>
-                        <Typography
-                          sx={{
-                            fontFamily: "'Advent Pro', sans-serif",
-                            fontWeight: "bold",
-                            color: "#FFFFFF",
-                          }}
-                          component="p"
-                          variant="body1"
-                          color="black"
-                          gutterBottom
-                        >
-                          {convertMonth(data.dayOfWeek)}
-                          &nbsp;
-                          {data.startTime.slice(0, 5)}-
-                          {data.endTime.slice(0, 5)}
-                        </Typography>
-                      </Item2>
-                    </Stack>
-                  </ColorButton>
-                </Item>
-              )
-          )}
+                      {/* {index}
+                      &nbsp; */}
+                      {data.courseName}
+                    </Typography>
+                  </Item2>
+                  <Item2 elevation={0}>
+                    <Typography
+                      sx={{
+                        fontFamily: "'Advent Pro', sans-serif",
+                        fontWeight: "bold",
+                        color: "#FFFFFF",
+                      }}
+                      component="p"
+                      variant="body1"
+                      color="black"
+                      gutterBottom
+                    >
+                      {convertMonth(data.dayOfWeek)}
+                      &nbsp;
+                      {data.startTime.slice(0, 5)}-{data.endTime.slice(0, 5)}
+                    </Typography>
+                  </Item2>
+                </Stack>
+              </ColorButton>
+            </Item>
+          ))}
         </Stack>
       </Box>
       <Typography
@@ -331,6 +470,135 @@ const DashboardHome = (props) => {
       >
         My Activities
       </Typography>
+      <Box sx={{ width: "100%" }}>
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          {Course.filter((Course) =>
+            Activity.some((Activity) => Activity.courseId === Course.id)
+          ).map((data, index) => (
+            <Grid item xs={6} key={index}>
+              <Item elevation={0} sx={{ backgroundColor: "#fff" }}>
+                <Grid
+                  container
+                  rowSpacing={0}
+                  columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                >
+                  <Grid item xs={1}></Grid>
+                  <Grid item xs={10}>
+                    <Item sx={{ borderRadius: 3, backgroundColor: "#F2E9FF" }}>
+                      <Grid
+                        container
+                        rowSpacing={1}
+                        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                      >
+                        <Grid item xs={5}>
+                          <Item
+                            sx={{ backgroundColor: "#F2E9FF" }}
+                            elevation={0}
+                          >
+                            <Image
+                              src={
+                                data.courseName
+                                  .toLowerCase()
+                                  .includes("bahasa") ||
+                                data.courseName.toLowerCase().includes("马来文")
+                                  ? BahasaMelayu
+                                  : data.courseName
+                                      .toLowerCase()
+                                      .includes("math") ||
+                                    data.courseName.toLowerCase().includes("数")
+                                  ? Math
+                                  : data.courseName
+                                      .toLowerCase()
+                                      .includes("physic") ||
+                                    data.courseName.toLowerCase().includes("物")
+                                  ? Physics
+                                  : data.courseName
+                                      .toLowerCase()
+                                      .includes("english") ||
+                                    data.courseName.toLowerCase().includes("英")
+                                  ? English
+                                  : NoImg
+                              }
+                              layout={"responsive"}
+                            />
+                          </Item>
+                        </Grid>
+                        <Grid item xs={7}>
+                          <Item
+                            sx={{ backgroundColor: "#F2E9FF" }}
+                            elevation={0}
+                          >
+                            <Box
+                              component="div"
+                              p={2}
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                textAlign: "center",
+                                backgroundColor: "#51459E",
+                                color: "#FFFFFF",
+                                fontFamily: "'Advent Pro', sans-serif",
+                                wordBreak: "break-word",
+                                fontSize: "1.2em",
+                                borderRadius: 20,
+                                height: 1,
+                              }}
+                            >
+                              {data.courseName}
+                            </Box>
+                          </Item>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography
+                            sx={{
+                              fontFamily: "'Andada Pro', serif",
+                              fontSize: "0.85em",
+                              wordBreak: "break-word",
+                              fontWeight: "light",
+                            }}
+                            component="span"
+                            variant="body1"
+                            color="#7B7B7B"
+                            gutterBottom
+                          >
+                            Teacher&nbsp;{data.teacherName}
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={6}
+                          sx={{
+                            display: "flex",
+                            alignItems: "flex-end",
+                            justifyContent: "flex-end",
+                          }}
+                        >
+                          <ColorButton
+                            variant="contained"
+                            onClick={() => ClassroomLinkFetch(data.id)}
+                            sx={{
+                              borderRadius: 50,
+                              borderRight: 0,
+                              color: "#fff",
+                              "&:hover": {
+                                backgroundColor: "#fff",
+                                color: "#000",
+                              },
+                            }}
+                          >
+                            Go to Do
+                          </ColorButton>
+                        </Grid>
+                      </Grid>
+                    </Item>
+                  </Grid>
+                  <Grid item xs={1}></Grid>
+                </Grid>
+              </Item>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
       <Typography
         sx={{ fontFamily: "'Andada Pro', serif", fontWeight: "bold" }}
         component="h6"

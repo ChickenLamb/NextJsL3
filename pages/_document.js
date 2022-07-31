@@ -22,7 +22,7 @@ export default class MyDocument extends Document {
           {/* font-family: 'Advent Pro', sans-serif; font-family: 'Andada Pro', serif; */}
           <meta name="emotion-insertion-point" content="" />
           {this.props.emotionStyleTags}
-          <link rel="shortcut icon" href="../public/favicon.ico" />
+          {/* <link rel="shortcut icon" href="../public/favicon.ico" /> */}
         </Head>
         <body>
           <Main />

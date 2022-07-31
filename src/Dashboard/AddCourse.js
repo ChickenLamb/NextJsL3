@@ -140,7 +140,7 @@ const AddCourse = (props) => {
               <Typography ml={3} pt={1} sx={{ textAlign: "left" }}>
                 ClassDay:&nbsp;{data.dayOfWeek}
                 <br />
-                Class Duration:&nbsp;{data.startTime.slice(0, 5)}~
+                Class Time:&nbsp;{data.startTime.slice(0, 5)}~
                 {data.endTime.slice(0, 5)}
                 <br />
                 Teacher:&nbsp;{data.teacherName}

@@ -46,7 +46,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
-import Head from "next/head";
+
 import { Button } from "@mui/material";
 function Copyright(props) {
   return (
@@ -66,7 +66,7 @@ function Copyright(props) {
   );
 }
 
-const drawerWidth = 295;
+const drawerWidth = 265;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -124,11 +124,8 @@ function DashboardContent(props) {
 
   return (
     <>
-      <Head>
-        <title>ALL COURSES </title>
-      </Head>
       <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", height: "100vh" }}>
           <CssBaseline />
           {/* <AppBar position="absolute" open={open}>
             <Toolbar
@@ -165,7 +162,11 @@ function DashboardContent(props) {
             </Toolbar>
           </AppBar> */}
 
-          <Drawer variant="permanent" open={open}>
+          <Drawer
+            variant="permanent"
+            open={open}
+            sx={{ height: "100vh", overflowY: "auto" }}
+          >
             <Toolbar
               sx={{
                 display: "flex",
@@ -494,7 +495,7 @@ function DashboardContent(props) {
                   <Grid
                     item
                     xs={11}
-                    sx={{ height: "90vh", overflowY: "scroll" }}
+                    sx={{ height: "100vh", overflowY: "auto" }}
                   >
                     <Paper
                       sx={{
