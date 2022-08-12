@@ -6,7 +6,7 @@ export default async function API(method, path, token, data) {
   try {
     let res = await axios({
       method: method,
-      url: "https://api.l3education.com.my" + path,
+      url: "https://oldapi.l3education.com.my" + path,
       headers: {
         Authorization: "Bearer " + token,
       },

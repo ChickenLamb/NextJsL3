@@ -13,7 +13,7 @@ function Profile() {
   const [token, setToken] = useState(null);
   const [NewUser, setNewUser] = useState(false);
   const [userData, setUserData] = useState(null);
-
+  const [userGroup, setUserGroup] = useState(null);
   function newUserState(state) {
     setNewUser(state);
   }
@@ -23,6 +23,9 @@ function Profile() {
       .then((user) => {
         setToken(user.signInUserSession.accessToken.jwtToken);
         setUser(user);
+        setUserGroup(
+          user.signInUserSession.accessToken.payload["cognito:groups"][0]
+        );
         console.log("User: ", user);
       })
       .catch((err) => setUser(null));
@@ -30,7 +33,7 @@ function Profile() {
   useEffect(() => {
     if (token !== null) {
       console.log("Token: ", token);
-      // use API as a function to call API anywhere
+
       API("get", "/student/get", token).then((res) => {
         // console.log(res);
         if (res.status === 200 && res.message === "NOT FOUND") {
@@ -40,6 +43,8 @@ function Profile() {
           setUserData(res.data);
         }
       });
+
+      // use API as a function to call API anywhere
     }
   }, [token]);
   return (

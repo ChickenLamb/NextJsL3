@@ -99,6 +99,7 @@ const MyCourse = (props) => {
           // console.log("not found");
         } else if (res.status == 200 && res.message === "FOUND") {
           // console.log("found");
+          console.log(res.data);
           setCourse(res.data);
         }
       });

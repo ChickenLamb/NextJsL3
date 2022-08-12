@@ -94,7 +94,12 @@ const DashboardHome = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const [DateNow, setDateNow] = React.useState({
+    Day: String(new Date().getDate()).padStart(2, "0"),
+    Month: String(new Date().getMonth() + 1).padStart(2, "0"),
+    Year: new Date().getFullYear(),
+    weekday: convertMonth(new Date(new Date()).getDay()),
+  });
   let total = 0;
   function convertMonth(number) {
     if (number === 1) return "MON";
@@ -180,7 +185,10 @@ const DashboardHome = (props) => {
     }
   }, [Activity]);
   React.useEffect(() => {
-    console.log("timetable", Timetable);
+    if (Timetable.length > 0) {
+      console.log("timetable", Timetable);
+      console.log("here is date", DateNow);
+    }
   }, [Timetable]);
   // React.useEffect(() => console.log(page), [page]);
   return (
@@ -318,7 +326,7 @@ const DashboardHome = (props) => {
           spacing={2}
           px={2}
         >
-          {["FRI", "SAT", "SUN", "MON", "TUE", "WED", "THUR", "FRI"].map(
+          {["FRI", "SAT", "SUN", "MON", "TUE", "WED", "THUR"].map(
             (data, index) => (
               <Item sx={{ width: "100%" }}>
                 <Typography
@@ -330,9 +338,37 @@ const DashboardHome = (props) => {
                   textAlign={"left"}
                 >
                   {index + 1}
+                  {data === DateNow.weekday ? (
+                    <span style={{ backgroundColor: "green", color: "#fff" }}>
+                      Today
+                    </span>
+                  ) : (
+                    <></>
+                  )}
                 </Typography>
                 {/* convertMonth(data.dayOfWeek) === data && data.courseDate year === this year && data.courseDate month === this month && data.courseDate day === this day(+-depends on today's date) */}
-
+                {/* {Timetable.map((data) => (
+                  <Typography
+                    sx={{
+                      fontFamily: "'Andada Pro', serif",
+                      fontWeight: "bold",
+                    }}
+                    component="p"
+                    variant="h7"
+                    color="black"
+                    gutterBottom
+                    textAlign={"left"}
+                  >
+                    {data.courseDate} <br />
+                    {data.courseDate.slice(-2)} k <br />
+                    {data.courseDate.slice(5, 7)} m
+                    <br />
+                    {data.courseDate.slice(0, 2)} c<br />
+                    {data.courseDate.slice(2, 4)} y<br />
+                    w = (k+(2.6*m-0.2)-2*c+y+(y/4)+(c/4)%7)
+                    <br />
+                  </Typography>
+                ))} */}
                 <Typography
                   sx={{ fontFamily: "'Andada Pro', serif", fontWeight: "bold" }}
                   component="p"
@@ -342,6 +378,13 @@ const DashboardHome = (props) => {
                 >
                   {data}
                 </Typography>
+                {Timetable.map((data) => (
+                  <Typography>
+                    {data.courseDate.slice(0, 4)}
+                    {data.courseDate.slice(5, 7)}
+                    {data.courseDate.slice(-2)}
+                  </Typography>
+                ))}
               </Item>
             )
           )}
