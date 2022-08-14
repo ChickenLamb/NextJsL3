@@ -192,6 +192,7 @@ export default function Index() {
             alignItems="center"
             spacing={2}
             py={5}
+            ref={myRef}
           >
             <Item elevation={0}>
               <Stack
@@ -254,7 +255,7 @@ export default function Index() {
             alignItems="center"
             spacing={2}
             py={5}
-            ref={myRef}
+            ref={myRef2}
           >
             <Item
               elevation={0}
@@ -322,7 +323,7 @@ export default function Index() {
             alignItems="center"
             spacing={2}
             py={5}
-            ref={myRef2}
+            ref={myRef3}
           >
             <Item elevation={0}>
               <Stack
@@ -376,7 +377,7 @@ export default function Index() {
             alignItems="center"
             spacing={2}
             py={5}
-            ref={myRef3}
+            ref={myRef4}
           >
             <Item
               sx={{ color: "#01579B", fontWeight: "bolder", fontSize: "2em" }}
@@ -404,7 +405,7 @@ export default function Index() {
             alignItems="center"
             spacing={2}
             py={5}
-            ref={myRef4}
+            ref={myRef5}
           >
             <Item elevation={0}>
               <Image
@@ -453,7 +454,6 @@ export default function Index() {
             alignItems="center"
             spacing={2}
             py={5}
-            ref={myRef5}
           >
             <Item
               sx={{ color: "#01579B", fontWeight: "bolder", fontSize: "2em" }}
