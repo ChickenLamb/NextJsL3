@@ -40,47 +40,47 @@ const Carousel = () => {
         width={830}
       >
         {page === 0 && (
-          <Item>
+          <Item elevation={0}>
             <Image src={img1} width={800} height={300} layout={"fixed"}></Image>
           </Item>
         )}
         {page === 1 && (
-          <Item>
+          <Item elevation={0}>
             <Image src={img2} width={800} height={300} layout={"fixed"}></Image>
           </Item>
         )}
         {page === 2 && (
-          <Item>
+          <Item elevation={0}>
             <Image src={img3} width={800} height={300} layout={"fixed"}></Image>
           </Item>
         )}
         {page === 3 && (
-          <Item>
+          <Item elevation={0}>
             <Image src={img4} width={800} height={300} layout={"fixed"}></Image>
           </Item>
         )}
         {page === 4 && (
-          <Item>
+          <Item elevation={0}>
             <Image src={img5} width={800} height={300} layout={"fixed"}></Image>
           </Item>
         )}
         {page === 5 && (
-          <Item>
+          <Item elevation={0}>
             <Image src={img6} width={800} height={300} layout={"fixed"}></Image>
           </Item>
         )}
         {page === 6 && (
-          <Item>
+          <Item elevation={0}>
             <Image src={img7} width={800} height={300} layout={"fixed"}></Image>
           </Item>
         )}
         {page === 7 && (
-          <Item>
+          <Item elevation={0}>
             <Image src={img8} width={800} height={300} layout={"fixed"}></Image>
           </Item>
         )}
         {page === 8 && (
-          <Item>
+          <Item elevation={0}>
             <Image src={img9} width={800} height={300} layout={"fixed"}></Image>
           </Item>
         )}
