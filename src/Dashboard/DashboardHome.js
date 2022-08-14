@@ -378,13 +378,13 @@ const DashboardHome = (props) => {
                 >
                   {data}
                 </Typography>
-                {/* {Timetable.map((data) => (
+                {Timetable.map((data) => (
                   <Typography>
                     {data.courseDate.slice(0, 4)}
                     {data.courseDate.slice(5, 7)}
                     {data.courseDate.slice(-2)}
                   </Typography>
-                ))} */}
+                ))}
               </Item>
             )
           )}
