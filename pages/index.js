@@ -447,6 +447,19 @@ export default function Index() {
                 priority
               ></Image>
             </Item>
+            <Item
+              elevation={0}
+              sx={{
+                backgroundColor: "#000",
+                color: "#fff",
+                fontWeight: "bolder",
+                fontSize: "2em",
+              }}
+            >
+              平台
+              <br />
+              特点
+            </Item>
           </Stack>
           <Stack
             direction="column"
