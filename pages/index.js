@@ -41,6 +41,24 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Index() {
   const [Language, setLanguage] = React.useState("Chinese - Cn");
+  const myRef = React.useRef(null);
+  const myRef2 = React.useRef(null);
+  const myRef3 = React.useRef(null);
+  const myRef4 = React.useRef(null);
+  const myRef5 = React.useRef(null);
+  const executeScroll = (value) => {
+    if (value === 1) {
+      myRef.current.scrollIntoView();
+    } else if (value === 2) {
+      myRef2.current.scrollIntoView();
+    } else if (value === 3) {
+      myRef3.current.scrollIntoView();
+    } else if (value === 4) {
+      myRef4.current.scrollIntoView();
+    } else if (value === 5) {
+      myRef5.current.scrollIntoView();
+    }
+  };
   return (
     <>
       <Head>
@@ -77,7 +95,7 @@ export default function Index() {
                 alignItems="center"
                 spacing={7}
               >
-                <Link href="/about" color="#000" underline="none">
+                <a onClick={() => executeScroll(1)}>
                   <Item
                     sx={{
                       fontSize: "1.2em",
@@ -88,59 +106,63 @@ export default function Index() {
                   >
                     主页
                   </Item>
-                </Link>
-                <Link href="/about" color="#000" underline="none">
+                </a>
+                <a onClick={() => executeScroll(2)}>
                   <Item
                     elevation={0}
                     sx={{
                       fontSize: "1.2em",
                       "&:hover": {
                         borderBottom: "5px solid #01579B",
+                        cursor: "pointer",
                       },
                     }}
                   >
                     关于我们
                   </Item>
-                </Link>
-                <Link href="/about" color="#000" underline="none">
+                </a>
+                <a onClick={() => executeScroll(3)}>
                   <Item
                     elevation={0}
                     sx={{
                       fontSize: "1.2em",
                       "&:hover": {
                         borderBottom: "5px solid #01579B",
+                        cursor: "pointer",
                       },
                     }}
                   >
                     课程
                   </Item>
-                </Link>
-                <Link href="/about" color="#000" underline="none">
+                </a>
+                <a onClick={() => executeScroll(4)}>
                   <Item
                     elevation={0}
                     sx={{
                       fontSize: "1.2em",
                       "&:hover": {
                         borderBottom: "5px solid #01579B",
+                        cursor: "pointer",
                       },
                     }}
                   >
                     活动
                   </Item>
-                </Link>
-                <Link href="/about" color="#000" underline="none">
+                </a>
+                <a onClick={() => executeScroll(5)}>
                   <Item
                     elevation={0}
                     sx={{
                       fontSize: "1.2em",
                       "&:hover": {
                         borderBottom: "5px solid #01579B",
+                        cursor: "pointer",
                       },
                     }}
                   >
                     更多资讯
                   </Item>
-                </Link>
+                </a>
               </Stack>
             </Item>
             <Link
@@ -232,6 +254,7 @@ export default function Index() {
             alignItems="center"
             spacing={2}
             py={5}
+            ref={myRef}
           >
             <Item
               elevation={0}
@@ -299,6 +322,7 @@ export default function Index() {
             alignItems="center"
             spacing={2}
             py={5}
+            ref={myRef2}
           >
             <Item elevation={0}>
               <Stack
@@ -352,6 +376,7 @@ export default function Index() {
             alignItems="center"
             spacing={2}
             py={5}
+            ref={myRef3}
           >
             <Item
               sx={{ color: "#01579B", fontWeight: "bolder", fontSize: "2em" }}
@@ -379,6 +404,7 @@ export default function Index() {
             alignItems="center"
             spacing={2}
             py={5}
+            ref={myRef4}
           >
             <Item elevation={0}>
               <Image
@@ -427,6 +453,7 @@ export default function Index() {
             alignItems="center"
             spacing={2}
             py={5}
+            ref={myRef5}
           >
             <Item
               sx={{ color: "#01579B", fontWeight: "bolder", fontSize: "2em" }}
