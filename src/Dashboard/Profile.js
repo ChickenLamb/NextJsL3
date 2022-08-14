@@ -253,7 +253,7 @@ export default function Profile() {
       >
         Sign Out
       </ColorButton>
-      <Typography component="h5" variant="h5" color="black" gutterBottom>
+      {/* <Typography component="h5" variant="h5" color="black" gutterBottom>
         token:
       </Typography>
       <Typography
@@ -271,7 +271,7 @@ export default function Profile() {
         }}
       >
         {user.signInUserSession.accessToken.jwtToken}
-      </Typography>
+      </Typography> */}
     </React.Fragment>
   );
 }
