@@ -1,4 +1,4 @@
-# NextJsL3
+# NextJsL3+Amplify Auth
 
 ## How to use
 
