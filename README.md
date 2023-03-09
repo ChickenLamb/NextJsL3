@@ -11,4 +11,4 @@ npm run dev
 
 or:
 
-https://vercel.com/chickenlamb/next-js-l3
+https://next-js-l3.vercel.app
